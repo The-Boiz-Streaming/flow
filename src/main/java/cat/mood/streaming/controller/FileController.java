@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.nio.ByteBuffer;
@@ -29,6 +30,11 @@ public class FileController {
     public Mono<?> hello() {
         log.info("hello");
         return Mono.just("Hello World");
+    }
+
+    @GetMapping(value = "/{filename}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public Mono<ResponseEntity<Flux<DataBuffer>>> getSong(@PathVariable String filename,  @RequestHeader(value = "Range", required = false) String rangeHeader) {
+        return s3Service.streamSong(filename + ".mp3", rangeHeader);
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
@@ -59,5 +65,4 @@ public class FileController {
                     .body("Error uploading file: " + e.getMessage()));
             });
     }
-
 }
