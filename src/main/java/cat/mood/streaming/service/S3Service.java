@@ -1,8 +1,10 @@
 package cat.mood.streaming.service;
 
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 import software.amazon.awssdk.auth.credentials.AwsCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.core.async.AsyncRequestBody;
@@ -17,6 +19,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 @Slf4j
 @Service
+@Data
 public class S3Service {
     final AwsCredentials awsCredentials;
     final Region region;
@@ -35,21 +38,24 @@ public class S3Service {
                 .credentialsProvider(StaticCredentialsProvider.create(awsCredentials))
                 .region(Region.AWS_GLOBAL)
                 .endpointOverride(endpoint)
+                .forcePathStyle(true)
                 .build();
     }
 
-    public CompletableFuture<PutObjectResponse> uploadSong(byte[] bytes, String key) {
+    public Mono<PutObjectResponse> uploadSong(byte[] bytes, String key) {
         if (bytes == null) {
-            throw new IllegalArgumentException("bytes cannot be null");
+            return Mono.error(new IllegalArgumentException("bytes cannot be null"));
         }
 
         PutObjectRequest request = PutObjectRequest.builder()
                             .key(key)
                             .bucket(musicBucket)
                             .build();
-        return s3AsyncClient.putObject(
+        return Mono.fromFuture(() -> s3AsyncClient.putObject(
                 request,
                 AsyncRequestBody.fromBytes(bytes)
-        );
+        ))
+        .doOnSuccess(response -> log.info("Successfully uploaded file: {}", key))
+        .doOnError(error -> log.error("Error uploading file: {}", key, error));
     }
 }
