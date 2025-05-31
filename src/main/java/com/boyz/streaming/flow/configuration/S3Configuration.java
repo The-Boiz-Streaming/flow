@@ -1,4 +1,4 @@
-package cat.mood.streaming.configuration;
+package com.boyz.streaming.flow.configuration;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;

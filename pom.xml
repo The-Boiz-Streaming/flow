@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>cat.mood</groupId>
-	<artifactId>streaming</artifactId>
+	<artifactId>flow</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>streaming</name>
 	<description>streaming</description>

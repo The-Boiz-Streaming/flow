@@ -1,4 +1,4 @@
-package cat.mood.streaming;
+package com.boyz.streaming.flow;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

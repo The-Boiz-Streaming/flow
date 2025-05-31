@@ -1,4 +1,4 @@
-package cat.mood.streaming.service;
+package com.boyz.streaming.flow.service;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;

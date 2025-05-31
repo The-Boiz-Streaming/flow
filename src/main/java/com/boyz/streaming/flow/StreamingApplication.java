@@ -1,4 +1,4 @@
-package cat.mood.streaming;
+package com.boyz.streaming.flow;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
