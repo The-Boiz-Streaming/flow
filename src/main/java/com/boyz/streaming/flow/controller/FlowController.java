@@ -18,14 +18,14 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Slf4j
 @RestController
-@RequestMapping("/file")
-public class FileController {
+@RequestMapping("/flow")
+public class FlowController {
     final S3Service s3Service;
 
-    @GetMapping
+    @GetMapping("/status")
     public Mono<?> hello() {
         log.info("hello");
-        return Mono.just("Hello World");
+        return Mono.just("OK");
     }
 
     @GetMapping(value = "/{filename}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
