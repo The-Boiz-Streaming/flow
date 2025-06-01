@@ -1,20 +1,5 @@
 spring:
   application:
     name: flow
-
-logging:
-  pattern:
-    console: '%d{yyyy-MM-dd HH:mm:ss} %highlight(%-5level) [%thread] %logger{36} - %msg%n'
-  level:
-    org:
-      springframework:
-        web: info
-
-cat:
-  mood:
-    s3:
-      accessKey: admin
-      secretKey: admin123
-      region: aws-global
-      endpoint: http://localhost:9000
-      musicBucket: music
+  config:
+    import: optional:configserver:http://${CONFIG_SERVER_HOST:localhost}:${CONFIG_SERVER_PORT:8888}
