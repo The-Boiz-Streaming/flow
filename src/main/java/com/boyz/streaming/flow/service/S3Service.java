@@ -1,6 +1,8 @@
 package com.boyz.streaming.flow.service;
 
+import com.boyz.streaming.flow.dto.SendRequestDTO;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.reactivestreams.Subscriber;
 import org.reactivestreams.Subscription;
@@ -36,13 +38,15 @@ public class S3Service {
     final URI endpoint;
     final String musicBucket;
     final S3AsyncClient s3AsyncClient;
+    final KafkaProducer kafkaProducer;
 
     @Autowired
-    S3Service(AwsCredentials awsCredentials, Region region, URI endpoint, String musicBucket) {
+    S3Service(AwsCredentials awsCredentials, Region region, URI endpoint, String musicBucket, KafkaProducer kafkaProducer) {
         this.awsCredentials = awsCredentials;
         this.region = region;
         this.endpoint = endpoint;
         this.musicBucket = musicBucket;
+        this.kafkaProducer = kafkaProducer;
 
         this.s3AsyncClient = S3AsyncClient.builder()
                 .credentialsProvider(StaticCredentialsProvider.create(awsCredentials))
@@ -74,6 +78,8 @@ public class S3Service {
                 .bucket(musicBucket)
                 .key(key)
                 .build();
+
+        kafkaProducer.send(new SendRequestDTO("flow", key));
 
         return Mono.fromFuture(s3AsyncClient.headObject(headRequest))
                 .flatMap(head -> {
