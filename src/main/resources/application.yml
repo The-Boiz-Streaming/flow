@@ -1,6 +1,6 @@
 spring:
   application:
-    name: streaming
+    name: flow
 
 logging:
   pattern:
