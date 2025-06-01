@@ -6,10 +6,9 @@ logging:
   pattern:
     console: '%d{yyyy-MM-dd HH:mm:ss} %highlight(%-5level) [%thread] %logger{36} - %msg%n'
   level:
-    cat.mood.streaming: DEBUG
     org:
       springframework:
-        web: debug
+        web: info
 
 cat:
   mood:
